@@ -3,7 +3,6 @@
 
 #include "Account.h"
 #include <string>
-#include <limits.h>
 
 class Card {
 
@@ -13,8 +12,6 @@ class Card {
 	Account savings;
 	
 public:
-	
-	Card();
 	
 	Card(std::string cardNumber_, std::string pin_, int checkingBal, int savingsBal);
 	

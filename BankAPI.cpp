@@ -39,7 +39,7 @@ bool BankAPI::loadData(std::ifstream& inputFile) {
 			return false;
 		}
 		
-		Card card(cardNumber, pinNumber, checkingBalance, savingsBalance);
+		Card *card = new Card(cardNumber, pinNumber, checkingBalance, savingsBalance);
 		
 		cardData.insert({cardNumber, card});
 	}
@@ -53,28 +53,25 @@ bool BankAPI::checkCard(std::string cardNumber, std::string pin) {
 	if (cardData.find(cardNumber) == cardData.end()) return false;
   
 	// check validity of pin number
-	Card c = cardData[cardNumber];
-	return c.validate(pin);
+	return cardData[cardNumber] -> validate(pin);
 }
 	
 int BankAPI::getBalance(std::string cardNumber, int code) {
-	Card c = cardData[cardNumber];
 	switch (code) {
 		case 1:
-			return c.getCheckingBalance();
+			return cardData[cardNumber] -> getCheckingBalance();
 		case 2:
-			return c.getSavingsBalance();
+			return cardData[cardNumber] -> getSavingsBalance();
 	}
 	return INT_MIN;
 }
   
 int BankAPI::setAndGetBalance(std::string cardNumber, int amount, int code) {
-	Card c = cardData[cardNumber];
 	switch (code) {
 		case 1:
-			return c.setAndGetCheckingBalance(amount);
+			return cardData[cardNumber] -> setAndGetCheckingBalance(amount);
 		case 2:
-			return c.setAndGetSavingsBalance(amount);
+			return cardData[cardNumber] -> setAndGetSavingsBalance(amount);
 	}
 	return INT_MIN;
 }

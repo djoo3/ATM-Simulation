@@ -235,6 +235,33 @@ public:
         return false;
     }
     
+    // Finish up the program, if prompted by user, then reset atm data
+    bool finish(bool resetData) {
+        cout << "If you would like to finish, please press \"1\"" << "\n";
+        cout << "If you would like to make another transaction, please press \"2\"" << "\n";
+        cout << "If you would like to reset the atm, please press \"3\"" << "\n";
+        char selection;
+        while(cin >> selection) {
+            switch (selection) {
+                case 'q':
+                    terminate();
+                case '1':
+                    cout << "\nThank you for using The National Bear Bank!" << "\n";
+                    return true;
+                case '2':
+                    while (!selectAndRunAction()) continue;
+                    return true;
+                case '3':
+                    cout << "\nThank you for using The National Bear Bank! (RESET OPTION)" << "\n";
+                    resetData = true;
+                    return true;
+                default:
+                    cout << "\nINVALID INPUT: Press \"1\" to FINISH, Press \"2\" to MAKE ANOTHER TRANSACTION, Press \"3\" to RESET ATM, Press \"q\" to quit program" << "\n";
+            }
+        }
+        cout << "\nINVALID INPUT: ";
+        return false;
+    }
     
 };
 
@@ -262,9 +289,14 @@ int main() {
             // process and validate card number and PIN; if user doesn't seem to know the card number and PIN number combination, shut down the application
             atm.processCard(cardNumber, pinNumber);
             
+            // select checking or savings account for this transaction
             atm.selectAccount();
             
+            // select one of the following actions to perform: see balance, withdraw, or deposit
             while (!atm.selectAndRunAction()) continue;
+
+            // select one of the following actions to perform: finish, perform another transaction on this account, or finish and reset ATM data
+            while (!atm.finish(resetData)) continue;
             
         }
         

@@ -8,7 +8,7 @@
 
 class BankAPI {
 	
-	std::unordered_map<std::string, Card> cardData;
+	std::unordered_map<std::string, Card*> cardData;
 	
 public:
 
