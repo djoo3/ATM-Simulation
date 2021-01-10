@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 #include <unordered_map>
+#include <utility>
 #include <limits.h>
 
 bool BankAPI::loadData(std::ifstream& inputFile) {
@@ -13,6 +14,10 @@ bool BankAPI::loadData(std::ifstream& inputFile) {
 	int PIN_NUMBER_LENGTH = 0;
 	int checkingBalance = 0;
 	int savingsBalance = 0;
+
+	// delete pointers to card instances to minimize memory leak, empty cardData before loading in new values
+	for (std::pair<std::string, Card*> it : cardData) delete it.second;
+	cardData.clear();
 	
 	// set the length of card number and pin number according to the input file
 	if (!(inputFile >> CARD_NUMBER_LENGTH >> PIN_NUMBER_LENGTH)) return false;
