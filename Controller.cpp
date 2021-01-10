@@ -5,7 +5,7 @@
 #include <string>
 #include <limits.h>
 
-Controller::Controller() : database(BankAPI()) {}
+Controller::Controller() {}
 
 bool Controller::loadBankInformation(std::ifstream& inputFile) {
     return database.loadData(inputFile);    
@@ -18,6 +18,7 @@ bool Controller::atmAvailable() {
 bool Controller::checkCardValid(std::string cardNumber, std::string pinNumber) {
     if (database.checkCard(cardNumber, pinNumber)) {
         cardState = CardState::HASCARD;
+        currentCardNumber = cardNumber;
         return true;
     }
     return false;

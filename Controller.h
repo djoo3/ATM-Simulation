@@ -11,14 +11,14 @@ enum class AccountState { CHECKING, SAVINGS };
 
 class Controller {
 
-    int serial;
     CardState cardState;
     AccountState accountState;
     BankAPI database;
+    std::string currentCardNumber;
 
 public:
 
-    Controller(int n) : serial(n) {}
+    Controller();
 
     // load information into database
     bool loadBankInformation(std::ifstream& inputFile);
@@ -34,6 +34,9 @@ public:
     
     // returns selected account's balance
     int seeBalance();
+
+    // returns updated balance after processing the amount given
+    int update(int amount);
     
     // return selected account's new balance after processing withdraw
     int withdraw(int amount);

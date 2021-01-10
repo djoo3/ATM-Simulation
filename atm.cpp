@@ -31,7 +31,7 @@ class ATMObject {
 
 public:
 
-    ATMObject() : ctrl(1) {}
+    ATMObject() {}
     
     // Quit application
     void terminate() {

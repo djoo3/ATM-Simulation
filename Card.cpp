@@ -1,10 +1,9 @@
 #include "Card.h"
+#include "Account.h"
 
 #include <string>
 #include <limits.h>
 
-Card::Card() : cardNumber(""), pin("") {}
-	
 Card::Card(std::string cardNumber_, std::string pin_, int checkingBal, int savingsBal) :
     cardNumber(cardNumber_), pin(pin_), checking(checkingBal), savings(savingsBal) {}
 	
@@ -33,7 +32,7 @@ int Card::getSavingsBalance() {
 }
 	
 int Card::setAndGetCheckingBalance(int change) {
-    int bal = INT_MIN
+    int bal = INT_MIN;
     if (checking.available()) {
         checking.changeUpdateState();
         checking.setBalance(change);
@@ -43,7 +42,7 @@ int Card::setAndGetCheckingBalance(int change) {
     return bal;
 }
 	
-void Card::setAndGetSavingsBalance(int change) {
+int Card::setAndGetSavingsBalance(int change) {
     int bal = INT_MIN;
     if (savings.available()) {
         savings.changeUpdateState();

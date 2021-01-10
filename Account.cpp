@@ -1,7 +1,5 @@
 #include "Account.h"
 
-Account::Account() : balance(0) {}
-
 Account::Account(int bal) : balance(bal) {}
 	
 void Account::changeUpdateState() {
