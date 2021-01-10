@@ -246,12 +246,14 @@ public:
                 case 'q':
                     terminate();
                 case '1':
+                    ctrl.eject();
                     cout << "\nThank you for using The National Bear Bank!" << "\n";
                     return true;
                 case '2':
                     while (!selectAndRunAction()) continue;
                     return true;
                 case '3':
+                    ctrl.eject();
                     cout << "\nThank you for using The National Bear Bank! (RESET OPTION)" << "\n";
                     resetData = true;
                     return true;

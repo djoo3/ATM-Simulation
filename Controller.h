@@ -44,7 +44,7 @@ public:
     // return selected account's newe balance after processing deposit
     int deposit(int amount);
     
-    // Sets CardState of contrtoller to NOCARD
+    // Sets CardState of controller to NOCARD
     void eject();
 
 };

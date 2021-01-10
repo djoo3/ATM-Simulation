@@ -65,5 +65,6 @@ int Controller::deposit(int amount) {
 }
 
 void Controller::eject() {
+    currentCardNumber = "";
     cardState = CardState::NOCARD;
 }
