@@ -18,8 +18,6 @@ class Controller {
 
 public:
 
-    Controller();
-
     // load information into database
     bool loadBankInformation(std::ifstream& inputFile);
 

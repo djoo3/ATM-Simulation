@@ -5,8 +5,6 @@
 #include <string>
 #include <limits.h>
 
-Controller::Controller() {}
-
 bool Controller::loadBankInformation(std::ifstream& inputFile) {
     return database.loadData(inputFile);    
 }

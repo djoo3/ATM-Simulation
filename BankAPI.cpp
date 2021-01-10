@@ -21,6 +21,9 @@ bool BankAPI::loadData(std::ifstream& inputFile) {
 	
 	// set the length of card number and pin number according to the input file
 	if (!(inputFile >> CARD_NUMBER_LENGTH >> PIN_NUMBER_LENGTH)) return false;
+
+	// check that the card number and pin number lengths are valid
+	if (CARD_NUMBER_LENGTH < 1 || PIN_NUMBER_LENGTH < 1) return false;
 	
 	std::string line;
 	while (std::getline(inputFile, line)) {
@@ -30,6 +33,10 @@ bool BankAPI::loadData(std::ifstream& inputFile) {
 		
 		// check that the card number input follows the card number format
 		if (cardNumber.length() == CARD_NUMBER_LENGTH) {
+
+			// check for duplicate entries on card number
+			if (cardData.find(cardNumber) != cardData.end()) return false;
+
 			for (char& c : cardNumber)
 				if (c >= '9' || c <= '0') return false;
 		} else {

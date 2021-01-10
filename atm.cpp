@@ -10,7 +10,6 @@ class ATMObject {
     
     Controller ctrl;
     int attemptLimit = INT_MAX;
-    bool dataImported = false;
     
     // HELPER: converts string value to int if it's a valid number
     int stringToInt(string s) {
@@ -30,18 +29,11 @@ class ATMObject {
             
 
 public:
-
-    ATMObject() {}
     
     // Quit application
     void terminate() {
         cout << "\n\nTHANK YOU FOR USING NATIONAL BEAR BANK, HAVE A GREAT REST OF YOUR DAY!" << "\n";
         exit (EXIT_SUCCESS);
-    }
-    
-    // Checks if bank data has been imported into the virtual ATM
-    bool importedData() {
-        return dataImported;
     }
 
     // Checks if ATM is currently processing a card
@@ -58,6 +50,7 @@ public:
         cout << "\t- The first line should compose of two numbers separated by a space: the first the length of card numbers, the second the length of pin numbers" << "\n";
         cout << "\t- The number of digits for both the card numbers and the pin numbers should not be less than 1" << "\n";
         cout << "\t- All lines after the first should detail the following information separated by a space in the following order: card number, pin number, checking account balance, savins account balance" << "\n";
+        cout << "\t- Duplicate card number entries are not allowed" << "\n";
         cout << "Any deviations from the above guidelines will result in failure to run, or weird outputs. PLEASE DOUBLE CHECK YOUR FORMATTING!" << "\n\n";
     }
     
@@ -71,12 +64,10 @@ public:
     
         if (filename == "q") terminate();
     
-        cout << "\n\nImporting data..." << "\n\n";
-    
         ifstream dataFile(filename);
         if (dataFile.is_open()) {
+            cout << "\n\nImporting data..." << "\n\n";
             if (ctrl.loadBankInformation(dataFile)) {
-                dataImported = true;
                 cout << "And we have all the data ready to go!" << "\n\n";
                 dataFile.close();
                 return true;
@@ -111,9 +102,10 @@ public:
     
     // Process the card number and PIN number inputted by user
     // If the user guesses wrong <attemptLimit> times, we go back to printWelcome
-    void processCard(string& cardNumber, string& pinNumber) {
+    void processCard() {
+        string cardNumber = "";
+        string pinNumber = "";
         bool success = false;
-        
         int numberOfAttempts = 0;
         
         while (!success) {
@@ -128,7 +120,7 @@ public:
             if (pinNumber == "q") terminate();
             
             success = ctrl.checkCardValid(cardNumber, pinNumber);
-            if (success) break;
+            if (success) return;
             
             numberOfAttempts += 1;
             if (numberOfAttempts > attemptLimit) {
@@ -136,7 +128,7 @@ public:
                 exit (EXIT_SUCCESS);
             }
             
-            if (!success) cout << "\nInvalid card number or PIN, try again." << "\n\n";
+            cout << "\nInvalid card number or PIN, try again." << "\n\n";
         }
     }
     
@@ -240,6 +232,7 @@ public:
         cout << "If you would like to finish, please press \"1\"" << "\n";
         cout << "If you would like to make another transaction, please press \"2\"" << "\n";
         cout << "If you would like to reset the atm, please press \"3\"" << "\n";
+
         char selection;
         while(cin >> selection) {
             switch (selection) {
@@ -254,8 +247,8 @@ public:
                     return true;
                 case '3':
                     ctrl.eject();
-                    cout << "\nThank you for using The National Bear Bank! (RESET OPTION)" << "\n";
                     resetData = true;
+                    cout << "\nThank you for using The National Bear Bank! (RESET OPTION)" << "\n";
                     return true;
                 default:
                     cout << "\nINVALID INPUT: Press \"1\" to FINISH, Press \"2\" to MAKE ANOTHER TRANSACTION, Press \"3\" to RESET ATM, Press \"q\" to quit program" << "\n";
@@ -273,8 +266,6 @@ int main() {
     ios_base::sync_with_stdio(false);
 
     ATMObject atm;
-    string cardNumber = "";
-    string pinNumber = "";
     bool resetData = true;
     
     while (1) {
@@ -289,7 +280,7 @@ int main() {
         while(atm.isAvailable() && !resetData) {
             
             // process and validate card number and PIN; if user doesn't seem to know the card number and PIN number combination, shut down the application
-            atm.processCard(cardNumber, pinNumber);
+            atm.processCard();
             
             // select checking or savings account for this transaction
             atm.selectAccount();
